@@ -6,56 +6,33 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
 public class WeatherApp {
 
     public static void main(String[] args) {
-        // OpenWeatherMap API base URL
+        // OpenWeatherMap API base URL and API key
         String baseUrl = "https://api.openweathermap.org/data/2.5/weather";
-        String apiKey = loadApiKey(); // Load API key from .env file
+        String apiKey = "e04159bad661e79201f4cc4f9b0d877e"; // Replace with your OpenWeatherMap API key
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the name of the city: ");
+        String city = scanner.nextLine();
 
-        // Use try-with-resources to ensure the scanner is closed
-        try (Scanner scanner = new Scanner(System.in)) {
-            System.out.print("Enter the name of the city: ");
-            String city = scanner.nextLine();
-
-            try {
-                // Build the API request URL
-                String requestUrl = String.format("%s?q=%s&appid=%s&units=metric", baseUrl, city, apiKey);
-
-                // Fetch weather data
-                String weatherResponse = fetchApiResponse(requestUrl);
-
-                // Format and print the weather data
-                printFormattedWeatherData(weatherResponse);
-
-            } catch (IOException e) {
-                System.err.println("An I/O error occurred: " + e.getMessage());
-            } catch (IllegalArgumentException e) {
-                System.err.println("An illegal argument error occurred: " + e.getMessage());
-            } catch (Exception e) {
-                System.err.println("An unexpected error occurred: " + e.getMessage());
-            }
-        }
-    }
-
-    // New method to load API key from .env file
-    private static String loadApiKey() {
         try {
-            List<String> lines = Files.readAllLines(Paths.get("demo/src/main/java/weatherapp/.env"));
-            // Print a message indicating the API key has been loaded
-            System.out.println("API key loaded successfully."); // Debug line
-            return lines.stream()
-                        .filter(line -> line.startsWith("YOUR_API_KEY="))
-                        .findFirst()
-                        .map(line -> line.split("=")[1].replace("\"", "").trim())
-                        .orElseThrow(() -> new IOException("API key not found in .env file"));
+            // Build the API request URL
+            String requestUrl = String.format("%s?q=%s&appid=%s&units=metric", baseUrl, city, apiKey);
+
+            // Fetch weather data
+            String weatherResponse = fetchApiResponse(requestUrl);
+
+            // Format and print the weather data
+            printFormattedWeatherData(weatherResponse);
+
         } catch (IOException e) {
-            System.err.println("Error loading API key: " + e.getMessage());
-            return null; // Handle the case where the API key cannot be loaded
+            System.err.println("An I/O error occurred: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.err.println("An illegal argument error occurred: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("An unexpected error occurred: " + e.getMessage());
         }
     }
 
