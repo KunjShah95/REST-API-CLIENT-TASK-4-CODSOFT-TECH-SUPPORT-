@@ -14,7 +14,7 @@ public class WeatherApp {
 
     public static void main(String[] args) {
         // OpenWeatherMap API URL and API key
-        String apiKey = "e04159bad661e79201f4cc4f9b0d877e"; // Replace with your OpenWeatherMap API key
+        String apiKey = ""; // Replace with your OpenWeatherMap API key
         String city = "Ahmedabad"; // City name
         String requestUrl = String.format(
                 "https://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s&units=metric",
